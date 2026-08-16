@@ -1,0 +1,3 @@
+baseline_id,claim_id,name,definition,threshold,threshold_source,status
+B001,C001,Absolute residual EWMA,B_t=0.90 B_(t-1)+0.10 abs(r_t),0.0455502027202869,95th percentile of pooled calibration pre-onset score,FROZEN
+BNULL,C001,No-warning null,never emits alert,NA,structural null,FROZEN

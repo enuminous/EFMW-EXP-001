@@ -1,0 +1,7 @@
+ablation_id,claim_id,name,component_removed_or_changed,implementation,frozen_prediction,rationale,status
+A0,C001,Full frozen comparison,none,Run both frozen monitors,Primary prediction should pass,reference,FROZEN
+A1,C001,Remove recursion,recursive signed memory,Set M_t=r_t; C_t=abs(r_t),Lead advantage should materially shrink,tests recursion,FROZEN
+A2,C001,Destroy sign information,signed residual,Use abs(r_t) inside EFMW EWMA,Lead advantage should shrink toward baseline,tests signed persistence,FROZEN
+A3,C001,Temporal scrambling,residual order,Permute residual time order within each trial using seed+900000,Early-warning advantage should disappear,tests temporal coherence,FROZEN
+A4,C001,Null degradation,d_t,Force d_t=0 for entire trial,Neither monitor should show systematic pre-failure warning,negative control,FROZEN
+A5,C001,Sign-reversed degradation bias,0.05*d_t,Replace with -0.05*d_t,Absolute coherence score should retain comparable sensitivity,directionality control,FROZEN

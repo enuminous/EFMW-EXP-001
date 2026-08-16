@@ -1,0 +1,8 @@
+equation_id,claim_id,name,canonical_form,role,status
+EQ001,C001,Nominal one-step model,yhat_t = 0.82*y_(t-1) + u_t,shared residual generator,FROZEN
+EQ002,C001,Baseline EWMA,B_t = 0.90*B_(t-1) + 0.10*abs(r_t),conventional residual monitor,FROZEN
+EQ003,C001,Recursive signed coherence state,M_t = 0.97*M_(t-1) + 0.03*r_t,EFMW-style recursive state,FROZEN
+EQ004,C001,EFMW coherence score,C_t = abs(M_t),EFMW-style monitor score,FROZEN
+EQ005,C001,Degradation schedule,"d_t = clip((t-onset)/120,0,1.25)",benchmark hidden degradation,FROZEN
+EQ006,C001,Plant update,x_t=(0.82+0.08*d_t)*x_(t-1)+u_t+noise+0.05*d_t+0.012*d_t*sin(0.18*t),benchmark dynamics,FROZEN
+EQ007,C001,Controller,u_t = -0.45*x_(t-1),fixed controller,FROZEN

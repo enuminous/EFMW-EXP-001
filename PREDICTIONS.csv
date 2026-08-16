@@ -1,0 +1,7 @@
+prediction_id,claim_id,condition,variable,unit,efmw_prediction,lower_bound,upper_bound,baseline_prediction,expected_direction,time_window,endpoint_class,success_rule,status
+P001,C001,all confirmatory trials,paired_lead_gain,timesteps,>=10,,,baseline residual EWMA,positive,degradation onset through failure,primary,median(EFMW lead - baseline lead) >= 10 timesteps,FROZEN
+P002,C001,all confirmatory trials,efmw_median_lead_time,timesteps,>=55,,,calibration median baseline lead = 41.0,positive,degradation onset through failure,secondary,median EFMW warning lead >= 55 timesteps,FROZEN
+P003,C001,all confirmatory pre-onset samples,efmw_raw_false_positive_rate,fraction,0.05,0.03,0.07,baseline target = 0.05,approximately_equal,warmup through degradation onset,secondary,0.03 <= EFMW raw pre-onset FPR <= 0.07,FROZEN
+P004,C001,all confirmatory pre-onset samples,baseline_raw_false_positive_rate,fraction,0.05,0.03,0.07,calibration target = 0.05,approximately_equal,warmup through degradation onset,control,0.03 <= baseline raw pre-onset FPR <= 0.07,FROZEN
+P005,C001,all confirmatory trials,early_warning_win_rate,fraction,>=0.60,,,paired comparison,positive,degradation onset through failure,secondary,fraction of seeds with EFMW lead > baseline lead >= 0.60,FROZEN
+P006,C001,benchmark implementation,compute_ratio,ratio,<=1.50,,,baseline runtime,non_inferior,full confirmatory execution,secondary,median EFMW monitor runtime / baseline monitor runtime <= 1.50,FROZEN

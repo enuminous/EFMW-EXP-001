@@ -1,0 +1,9 @@
+variable_id,symbol,name,definition,unit,observed_by_monitor,status
+V001,x,latent plant state,internal simulated plant state,arbitrary state unit,no,FROZEN
+V002,y,observed state,x plus Gaussian observation noise sigma=0.02,arbitrary state unit,yes,FROZEN
+V003,u,control input,-0.45 times previous latent plant state,arbitrary control unit,yes,FROZEN
+V004,d,latent degradation,linear ramp from onset; hidden from monitors,dimensionless,no,FROZEN
+V005,r,one-step residual,y_t - (0.82*y_(t-1)+u_t),state unit,derived,FROZEN
+V006,B,baseline score,absolute residual EWMA,state unit,derived,FROZEN
+V007,M,recursive signed state,signed residual EWMA,state unit,derived,FROZEN
+V008,C,EFMW coherence score,absolute value of M,state unit,derived,FROZEN
