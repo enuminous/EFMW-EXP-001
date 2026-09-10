@@ -1,1 +1,8 @@
 prediction_id,observed_value,unit,interval_low,interval_high,effect_size,p_value,comparison_baseline,outcome_class,notes
+EXP001_PRIMARY_MEDIAN_PAIRED_GAIN,16.5,timesteps,3.5,18.5,,0.003923,residual_EWMA,PASS,Primary preregistered criterion was median paired warning-lead advantage >= 10 timesteps across 40 held-out seeds (1001-1040). Observed +16.5.
+EXP001_BASELINE_MEDIAN_LEAD,59.0,timesteps,,,,,residual_EWMA,OBSERVED,Median warning lead for conventional residual EWMA on held-out confirmatory seeds.
+EXP001_EFMW_MEDIAN_LEAD,78.0,timesteps,,,,,residual_EWMA,OBSERVED,Median warning lead for EFMW-style recursive coherence monitor on held-out confirmatory seeds.
+EXP001_EFMW_WIN_RATE,0.75,proportion,,,,,residual_EWMA,OBSERVED,EFMW provided greater warning lead than baseline on 75% of held-out seeds (30/40).
+EXP001_BASELINE_FPR,0.0513,proportion,,,,,residual_EWMA,OBSERVED,False-positive rate for residual EWMA in the confirmatory benchmark.
+EXP001_EFMW_FPR,0.0615,proportion,,,,,residual_EWMA,OBSERVED,False-positive rate for EFMW recursive coherence monitor in the confirmatory benchmark.
+EXP001_PRIMARY_THRESHOLD,10.0,timesteps,,,,,residual_EWMA,PRESPECIFIED,Frozen preregistered success threshold for the primary confirmatory endpoint.
