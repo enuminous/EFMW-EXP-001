@@ -1,0 +1,3 @@
+# Confirmatory output SHA-256
+6e62406da3d786614a8f010e1d117f99601082a3f8e0bc5675e2f2549b3f7e5c  RAW_DATA/confirmatory_trials.csv
+ef24f2855765373dbc2ffaa1b3a61741612ae69c4dfeefd07aebb18ed6aba95e  PROCESSED_DATA/confirmatory_summary.csv
