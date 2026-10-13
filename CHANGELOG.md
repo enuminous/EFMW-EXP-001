@@ -15,3 +15,7 @@
 - Added a frozen follow-up protocol using the EXP-001 monitor definitions and thresholds on no-degradation traces, with a paired benign sensor-offset condition.
 - Published per-seed outputs; the absolute sustained false-alarm incidence criterion failed in the synthetic null conditions.
 - Kept the original EXP-001 frozen design and confirmatory outputs unchanged.
+## 2026-10-13 - EFMW-EXP-003 matched false-alarm screen
+- Added separate null calibration and held-out null/degradation evaluation using the EXP-001 simulator and monitor equations.
+- Published thresholds and per-seed outputs; the preregistered synthetic screen passed.
+- No changes to EXP-001 or EXP-002 results or frozen protocol files.
