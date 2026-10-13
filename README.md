@@ -48,3 +48,7 @@ The confirmatory results are included; do not use them to tune or revise the fro
 ### Scope
 
 This is a proof-of-method experiment for recursive coherence monitoring on a synthetic control benchmark. It is not a general experimental validation of EFMW, the canonical physical field equation, or performance in energy infrastructure.
+
+### Follow-up specificity screen
+
+[EFMW-EXP-002](EXP-002/README.md) reuses the frozen monitors and thresholds to measure sustained false alarms on synthetic no-degradation traces, including a brief benign sensor-offset pulse. Its preregistered absolute false-alarm criterion failed; it is not field validation.
