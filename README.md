@@ -5,7 +5,7 @@
 
 **eNuminous network:** [All public repositories](https://github.com/enuminous/EFMW/blob/main/REPOSITORY_NAVIGATION.md) · [EFMW](https://github.com/enuminous/EFMW) · [102 equations](https://github.com/enuminous/Monolithic_102_EFMW) · [Frozen Lean](https://github.com/enuminous/Monolithic-102-Zoo-Lean4) · [Zoo](https://github.com/enuminous/Tortoise) · [Papers](https://github.com/enuminous/papers) · [Quantum geometry](https://github.com/enuminous/Base888-Quantum-Geometry)
 
-**This project:** [Repository home](https://github.com/enuminous/EFMW-EXP-001) · [Subject index](https://github.com/enuminous/EFMW/blob/main/REPOSITORY_NAVIGATION.md#efmw-research-and-related-projects)
+**This project:** [Repository home](https://github.com/enuminous/EFMW-EXP-001) · [Subject index](https://github.com/enuminous/EFMW/blob/main/REPOSITORY_NAVIGATION.md#core-efmw-and-review)
 
 <details open>
 <summary><strong>On this page</strong></summary>
@@ -16,11 +16,12 @@
   - [Scope](#scope)
   - [Follow-up specificity screen](#follow-up-specificity-screen)
 
+
 </details>
 
 **Related repositories:** [EFMW-Safety-001](https://github.com/enuminous/EFMW-Safety-001) · [EFMW-FULL](https://github.com/enuminous/EFMW-FULL) · [Monolithic](https://github.com/enuminous/Monolithic) · [EFMW](https://github.com/enuminous/EFMW) · [papers](https://github.com/enuminous/papers)
 
-> **Evidence boundary:** A link between projects is navigation, not an assertion of proven equivalence, experimental validation, or shared authorship. See each repository's own status and review notes.
+> **Evidence boundary:** A link between projects is navigation, not an assertion of proven equivalence, experimental validation, or shared authorship. See each repository’s own status and review notes.
 <!-- ENUMINOUS-UNIFIED-NAV:END -->
 
 
