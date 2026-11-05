@@ -1,0 +1,10 @@
+PASS mean_drift_his_simulator: abs_0.90_baseline
+PASS mean_drift_his_simulator: abs_0.97
+PASS mean_drift_his_simulator: signed_0.90
+PASS mean_drift_his_simulator: signed_0.97_efmw
+PASS variance_fault_auditor_patch: abs_0.90_baseline
+PASS variance_fault_auditor_patch: abs_0.97
+PASS variance_fault_auditor_patch: signed_0.90
+PASS variance_fault_auditor_patch: signed_0.97_efmw
+PASS: 9 attachment hashes; 960 per-seed rows; 320 calibration maxima; all 8 summaries. NumPy 2.3.5.
+Not a simulator rerun: source-generation and monitor-equivalence checks in the supplied logs are not re-executed.

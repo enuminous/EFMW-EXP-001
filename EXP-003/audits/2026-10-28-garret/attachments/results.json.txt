@@ -1,0 +1,203 @@
+{
+ "checks": {
+  "patched_sim_default_path_identical": true,
+  "patched_sim_null_identical_under_variance_flag": true,
+  "max_abs_diff_vs_his_monitor_functions": 4.163336342344337e-17
+ },
+ "arms": {
+  "abs_0.90_baseline": {
+   "decay": 0.9,
+   "averaging": "abs then average",
+   "threshold": 0.05420151828535452,
+   "calibration_FAR": 0.05,
+   "heldout_null_false_alarms": 6
+  },
+  "abs_0.97": {
+   "decay": 0.97,
+   "averaging": "abs then average",
+   "threshold": 0.04421011383162915,
+   "calibration_FAR": 0.05,
+   "heldout_null_false_alarms": 8
+  },
+  "signed_0.90": {
+   "decay": 0.9,
+   "averaging": "signed then abs",
+   "threshold": 0.028398738730229453,
+   "calibration_FAR": 0.05,
+   "heldout_null_false_alarms": 1
+  },
+  "signed_0.97_efmw": {
+   "decay": 0.97,
+   "averaging": "signed then abs",
+   "threshold": 0.013606967897028078,
+   "calibration_FAR": 0.05,
+   "heldout_null_false_alarms": 2
+  }
+ },
+ "faults": {
+  "mean_drift_his_simulator": {
+   "abs_0.90_baseline": {
+    "actionable": 65,
+    "pre_onset_alert": 3,
+    "alert_at_or_after_failure": 12,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 16.5,
+    "median_lead_detected_only": 19.0,
+    "median_paired_gain_vs_baseline": 0.0,
+    "gain_bootstrap_95ci": [
+     0.0,
+     0.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     0,
+     0,
+     1.0
+    ],
+    "median_gain_both_detected": 0.0,
+    "n_both_detected": 65
+   },
+   "abs_0.97": {
+    "actionable": 74,
+    "pre_onset_alert": 1,
+    "alert_at_or_after_failure": 5,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 25.0,
+    "median_lead_detected_only": 26.0,
+    "median_paired_gain_vs_baseline": 2.0,
+    "gain_bootstrap_95ci": [
+     0.5,
+     5.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     10,
+     1,
+     0.01171875
+    ],
+    "median_gain_both_detected": 2.0,
+    "n_both_detected": 64
+   },
+   "signed_0.90": {
+    "actionable": 80,
+    "pre_onset_alert": 0,
+    "alert_at_or_after_failure": 0,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 53.5,
+    "median_lead_detected_only": 53.5,
+    "median_paired_gain_vs_baseline": 33.5,
+    "gain_bootstrap_95ci": [
+     28.5,
+     41.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     15,
+     0,
+     6.103515625e-05
+    ],
+    "median_gain_both_detected": 29.0,
+    "n_both_detected": 65
+   },
+   "signed_0.97_efmw": {
+    "actionable": 77,
+    "pre_onset_alert": 3,
+    "alert_at_or_after_failure": 0,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 59.0,
+    "median_lead_detected_only": 59.0,
+    "median_paired_gain_vs_baseline": 41.5,
+    "gain_bootstrap_95ci": [
+     37.0,
+     47.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     15,
+     3,
+     0.007537841796875
+    ],
+    "median_gain_both_detected": 38.5,
+    "n_both_detected": 62
+   }
+  },
+  "variance_fault_auditor_patch": {
+   "abs_0.90_baseline": {
+    "actionable": 77,
+    "pre_onset_alert": 3,
+    "alert_at_or_after_failure": 0,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 58.5,
+    "median_lead_detected_only": 59.0,
+    "median_paired_gain_vs_baseline": 0.0,
+    "gain_bootstrap_95ci": [
+     0.0,
+     0.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     0,
+     0,
+     1.0
+    ],
+    "median_gain_both_detected": 0.0,
+    "n_both_detected": 77
+   },
+   "abs_0.97": {
+    "actionable": 79,
+    "pre_onset_alert": 1,
+    "alert_at_or_after_failure": 0,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 60.5,
+    "median_lead_detected_only": 61.0,
+    "median_paired_gain_vs_baseline": 0.0,
+    "gain_bootstrap_95ci": [
+     0.0,
+     1.5
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     3,
+     1,
+     0.625
+    ],
+    "median_gain_both_detected": 0.0,
+    "n_both_detected": 76
+   },
+   "signed_0.90": {
+    "actionable": 47,
+    "pre_onset_alert": 0,
+    "alert_at_or_after_failure": 33,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 10.0,
+    "median_lead_detected_only": 29.0,
+    "median_paired_gain_vs_baseline": -50.5,
+    "gain_bootstrap_95ci": [
+     -1017.0,
+     -34.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     2,
+     32,
+     6.938353180885315e-08
+    ],
+    "median_gain_both_detected": -24.0,
+    "n_both_detected": 45
+   },
+   "signed_0.97_efmw": {
+    "actionable": 41,
+    "pre_onset_alert": 3,
+    "alert_at_or_after_failure": 36,
+    "no_alert": 0,
+    "median_lead_all_runs_missed_as_-999": 1.0,
+    "median_lead_detected_only": 33.0,
+    "median_paired_gain_vs_baseline": -61.5,
+    "gain_bootstrap_95ci": [
+     -1041.0,
+     -38.0
+    ],
+    "mcnemar_arm_only_baseline_only_p": [
+     1,
+     37,
+     2.837623469531536e-10
+    ],
+    "median_gain_both_detected": -24.0,
+    "n_both_detected": 40
+   }
+  }
+ }
+}

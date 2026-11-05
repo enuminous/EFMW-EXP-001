@@ -1,0 +1,95 @@
+Logs and provenance for the EXP-003 2x2 package.
+Code files are attached with a .txt suffix (README.md as README.txt, results.json as results.json.txt) so mail accepts them; contents are byte-identical, so SHA256SUMS_package.txt below still applies to the original names.
+
+===== provenance.txt =====
+== commit
+8f11bc5320cffb10932d5d31da7072d6ad4f65c2
+== EXP-003 diff vs 65134993 (commit Matthew linked) and vs aa7cc91 (commit that added EXP-003); empty = identical
+(end)
+== environment
+Python 3.11.18
+numpy 2.4.6
+x86_64
+== committed CSVs (as checked out): sha256, bytes, lines, CR count
+ad82b1e8d7388f472fd8a3b2f94182b8944b34ac4a2530cea7c81c61f1c930c2 183 3 0 EXP-003/calibration.csv
+93eac5c1f6b0b6f4a6782d75731b4d2ca0359c9e1f584796c66cc02ce2007b00 23084 321 0 EXP-003/results.csv
+== git blob hashes of committed CSVs
+100644 4af3084e70d3a55cddb815bc97f57a5293e8e78d 0	EXP-003/calibration.csv
+100644 4c357ee8799b843839105b6987a9b067bd10878c 0	EXP-003/results.csv
+== SHA256SUMS.txt entries
+77964aaf8a2170e553d98574d2bd4d73b5b50a01488a7cd842ef0da7f05c861b  calibration.csv
+8878460b1817b164aaffd9c3b4156b372d5876f764f8a2b5f91e971c8ff88a9d  results.csv
+
+===== his_run_and_analyze.txt =====
+Thresholds frozen from 80 calibration null seeds:
+residual_ewma,0.05420151828535453,calibration_FAR=5.000%
+recursive_coherence,0.01360696789702806,calibration_FAR=5.000%
+Wrote calibration.csv and 320 per-seed evaluation rows to results.csv.
+whole_run_false_alarm_incidence (heldout null)
+residual_ewma=6/80 (7.500%)
+recursive_coherence=2/80 (2.500%)
+actionable_warning_detection (heldout degradation)
+residual_ewma_actionable_warnings=65/80 (81.250%)
+residual_ewma_median_lead_all_runs=16.5
+residual_ewma_median_lead_when_detected=19.0
+recursive_coherence_actionable_warnings=77/80 (96.250%)
+recursive_coherence_median_lead_all_runs=59.0
+recursive_coherence_median_lead_when_detected=59.0
+median_paired_lead_gain=41.5
+median_gain_bootstrap_95_ci=[37.0, 47.0]
+mcnemar_efmw_only=15,baseline_only=3,p=0.0075378418
+PRIMARY_OUTCOME=passed
+exit 0
+
+===== package_stdout.txt =====
+{"patched_sim_default_path_identical": true, "patched_sim_null_identical_under_variance_flag": true, "max_abs_diff_vs_his_monitor_functions": 4.163336342344337e-17}
+abs_0.90_baseline {'decay': 0.9, 'averaging': 'abs then average', 'threshold': 0.05420151828535452, 'calibration_FAR': 0.05, 'heldout_null_false_alarms': 6}
+abs_0.97 {'decay': 0.97, 'averaging': 'abs then average', 'threshold': 0.04421011383162915, 'calibration_FAR': 0.05, 'heldout_null_false_alarms': 8}
+signed_0.90 {'decay': 0.9, 'averaging': 'signed then abs', 'threshold': 0.028398738730229453, 'calibration_FAR': 0.05, 'heldout_null_false_alarms': 1}
+signed_0.97_efmw {'decay': 0.97, 'averaging': 'signed then abs', 'threshold': 0.013606967897028078, 'calibration_FAR': 0.05, 'heldout_null_false_alarms': 2}
+== mean_drift_his_simulator
+abs_0.90_baseline {'actionable': 65, 'pre_onset_alert': 3, 'alert_at_or_after_failure': 12, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 16.5, 'median_lead_detected_only': 19.0, 'median_paired_gain_vs_baseline': 0.0, 'gain_bootstrap_95ci': [0.0, 0.0], 'mcnemar_arm_only_baseline_only_p': [0, 0, 1.0], 'median_gain_both_detected': 0.0, 'n_both_detected': 65}
+abs_0.97 {'actionable': 74, 'pre_onset_alert': 1, 'alert_at_or_after_failure': 5, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 25.0, 'median_lead_detected_only': 26.0, 'median_paired_gain_vs_baseline': 2.0, 'gain_bootstrap_95ci': [0.5, 5.0], 'mcnemar_arm_only_baseline_only_p': [10, 1, 0.01171875], 'median_gain_both_detected': 2.0, 'n_both_detected': 64}
+signed_0.90 {'actionable': 80, 'pre_onset_alert': 0, 'alert_at_or_after_failure': 0, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 53.5, 'median_lead_detected_only': 53.5, 'median_paired_gain_vs_baseline': 33.5, 'gain_bootstrap_95ci': [28.5, 41.0], 'mcnemar_arm_only_baseline_only_p': [15, 0, 6.103515625e-05], 'median_gain_both_detected': 29.0, 'n_both_detected': 65}
+signed_0.97_efmw {'actionable': 77, 'pre_onset_alert': 3, 'alert_at_or_after_failure': 0, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 59.0, 'median_lead_detected_only': 59.0, 'median_paired_gain_vs_baseline': 41.5, 'gain_bootstrap_95ci': [37.0, 47.0], 'mcnemar_arm_only_baseline_only_p': [15, 3, 0.007537841796875], 'median_gain_both_detected': 38.5, 'n_both_detected': 62}
+== variance_fault_auditor_patch
+abs_0.90_baseline {'actionable': 77, 'pre_onset_alert': 3, 'alert_at_or_after_failure': 0, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 58.5, 'median_lead_detected_only': 59.0, 'median_paired_gain_vs_baseline': 0.0, 'gain_bootstrap_95ci': [0.0, 0.0], 'mcnemar_arm_only_baseline_only_p': [0, 0, 1.0], 'median_gain_both_detected': 0.0, 'n_both_detected': 77}
+abs_0.97 {'actionable': 79, 'pre_onset_alert': 1, 'alert_at_or_after_failure': 0, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 60.5, 'median_lead_detected_only': 61.0, 'median_paired_gain_vs_baseline': 0.0, 'gain_bootstrap_95ci': [0.0, 1.5], 'mcnemar_arm_only_baseline_only_p': [3, 1, 0.625], 'median_gain_both_detected': 0.0, 'n_both_detected': 76}
+signed_0.90 {'actionable': 47, 'pre_onset_alert': 0, 'alert_at_or_after_failure': 33, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 10.0, 'median_lead_detected_only': 29.0, 'median_paired_gain_vs_baseline': -50.5, 'gain_bootstrap_95ci': [-1017.0, -34.0], 'mcnemar_arm_only_baseline_only_p': [2, 32, 6.938353180885315e-08], 'median_gain_both_detected': -24.0, 'n_both_detected': 45}
+signed_0.97_efmw {'actionable': 41, 'pre_onset_alert': 3, 'alert_at_or_after_failure': 36, 'no_alert': 0, 'median_lead_all_runs_missed_as_-999': 1.0, 'median_lead_detected_only': 33.0, 'median_paired_gain_vs_baseline': -61.5, 'gain_bootstrap_95ci': [-1041.0, -38.0], 'mcnemar_arm_only_baseline_only_p': [1, 37, 2.837623469531536e-10], 'median_gain_both_detected': -24.0, 'n_both_detected': 40}
+exit 0
+
+===== csv_equivalence.txt =====
+== regenerated CSVs: sha256, bytes, lines, CR count
+77964aaf8a2170e553d98574d2bd4d73b5b50a01488a7cd842ef0da7f05c861b 186 3 3 EXP-003/calibration.csv
+8878460b1817b164aaffd9c3b4156b372d5876f764f8a2b5f91e971c8ff88a9d 23405 321 321 EXP-003/results.csv
+== sha256sum -c SHA256SUMS.txt on regenerated files
+README.md: OK
+protocol.md: OK
+simulator.py: OK
+monitors.py: OK
+run.py: OK
+analyze.py: OK
+calibration.csv: OK
+results.csv: OK
+== regenerated with CRLF->LF: sha256 (compare to committed)
+ad82b1e8d7388f472fd8a3b2f94182b8944b34ac4a2530cea7c81c61f1c930c2 calibration.csv
+93eac5c1f6b0b6f4a6782d75731b4d2ca0359c9e1f584796c66cc02ce2007b00 results.csv
+== committed with LF->CRLF: sha256 (compare to SHA256SUMS)
+77964aaf8a2170e553d98574d2bd4d73b5b50a01488a7cd842ef0da7f05c861b calibration.csv
+8878460b1817b164aaffd9c3b4156b372d5876f764f8a2b5f91e971c8ff88a9d results.csv
+== byte comparison after stripping CR (cmp; no output = identical)
+calibration.csv identical
+results.csv identical
+== git diff --ignore-cr-at-eol --stat (empty = same content)
+(end)
+
+===== SHA256SUMS_package.txt =====
+49f25dcd7d70a8e65ab9c7f20e46e4f559aa2b6a30f4db9c272ef20cabb7428c  calibration_4arms.csv
+799853001339b94a8cbbbf091cad830d6572a1c2d98436542b7808e0a61c8fb5  calibration_maxima.csv
+8cf2c524af94593cb2d38ef69670d795c8e91a1ae0a07974482beee78e17e2a7  per_seed.csv
+bfaafcf5b3f5bc47129585d0e1fa1831ad1d5d062822733c21b05cba3d8b7a64  csv_equivalence.txt
+926b8ba89171b007c034f7a2f0c54d420dc538a32d7bfc3f7722f67bb8fea86a  his_run_and_analyze.txt
+ad8453358ddcad4b8db7ad8401230a91739a9bd96e1c6dfd831c4c525fe9795f  package_stdout.txt
+75b5db7557ab8dd215bd8da167d09cb2f3211f35ab77c8f70c8e65924be39e5b  provenance.txt
+59f0b8f9d82b35b370af2f195fdb79317318ad5bf4eacaeee760de8809ea118e  results.json

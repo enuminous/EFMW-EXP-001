@@ -1,0 +1,26 @@
+--- a/EXP-003/simulator.py
++++ b/EXP-003/simulator.py
+@@ -8,7 +8,10 @@
+ ONSET_HIGH = 200
+ 
+ 
+-def simulate(seed, null_degradation=False, reverse_bias=False):
++def simulate(seed, null_degradation=False, reverse_bias=False, variance_fault=False):
++    # variance_fault (added by Garret Sutherland for the Oct 2026 stress test, not part of the
++    # preregistered protocol): replaces the drift bias and sinusoid with zero-mean growth of the
++    # process noise, x(1 + 1.5 d). RNG draws, onset, failure and a = 0.82 + 0.08 d are unchanged.
+     rng = np.random.default_rng(seed)
+     onset = int(rng.integers(ONSET_LOW, ONSET_HIGH))
+     failure = onset + DEGRADATION_LEN
+@@ -20,7 +23,10 @@
+         a = 0.82 + 0.08 * d
+         process_noise = rng.normal(0, 0.035)
+         bias = (-0.05 if reverse_bias else 0.05) * d
+-        x = a * x + u + process_noise + bias + 0.012 * d * np.sin(0.18 * t)
++        if variance_fault:
++            x = a * x + u + process_noise * (1 + 1.5 * d)
++        else:
++            x = a * x + u + process_noise + bias + 0.012 * d * np.sin(0.18 * t)
+         y = x + rng.normal(0, 0.02)
+         out.append((seed, t, y, u, d, onset, failure, int(t >= failure)))
+     return out

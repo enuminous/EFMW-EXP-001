@@ -1,0 +1,5 @@
+arm,decay,averaging,threshold,calibration_FAR,heldout_null_false_alarms,heldout_null_FAR
+abs_0.90_baseline,0.9,abs,0.05420151828535452,0.0500,6/80,0.0750
+abs_0.97,0.97,abs,0.04421011383162915,0.0500,8/80,0.1000
+signed_0.90,0.9,signed,0.02839873873022945,0.0500,1/80,0.0125
+signed_0.97_efmw,0.97,signed,0.01360696789702808,0.0500,2/80,0.0250

@@ -1,0 +1,124 @@
+# Auditor's driver (Garret Sutherland, Oct 2026). Not part of the EXP-003 repo or its preregistration.
+# Run from the EFMW-EXP-001 repo root after: mkdir audit && cp exp003_2x2_package.py variance_fault.patch audit/
+# Imports the unchanged EXP-003 monitors.py and simulator.py. The variance-fault test uses a patched COPY of
+# simulator.py (audit/EXP-003-varfault/), so EXP-003/ itself is never modified.
+# Writes per-seed outputs and summaries for the 2x2 {abs-then-average, average-then-abs} x {decay 0.90, 0.97}.
+import csv, importlib.util, json, math, os, shutil, subprocess, sys
+import numpy as np
+
+ROOT = os.getcwd()
+OUT = os.path.join(ROOT, 'repro_out'); os.makedirs(OUT, exist_ok=True)
+sys.path.insert(0, os.path.join(ROOT, 'EXP-003'))
+import monitors as M
+import simulator as S
+
+# Patched copy of his simulator for the variance-fault stress test.
+VF = os.path.join(ROOT, 'audit', 'EXP-003-varfault')
+os.makedirs(VF, exist_ok=True)
+shutil.copy(os.path.join(ROOT, 'EXP-003', 'simulator.py'), os.path.join(VF, 'simulator.py'))
+subprocess.run(['git', 'apply', '-p2', '--unsafe-paths', '--directory=' + os.path.relpath(VF, ROOT),
+                os.path.join(ROOT, 'audit', 'variance_fault.patch')], check=True, cwd=ROOT)
+spec = importlib.util.spec_from_file_location('simulator_varfault', os.path.join(VF, 'simulator.py'))
+SV = importlib.util.module_from_spec(spec); spec.loader.exec_module(SV)
+
+CAL, NUL, DEG = range(3001, 3081), range(4001, 4081), range(5001, 5081)
+ARMS = [('abs_0.90_baseline', 0.90, False), ('abs_0.97', 0.97, False),
+        ('signed_0.90', 0.90, True), ('signed_0.97_efmw', 0.97, True)]
+BASE = 'abs_0.90_baseline'
+
+def series(rows):
+    return (np.array([r[2] for r in rows]), np.array([r[3] for r in rows]), rows[0][5], rows[0][6])
+
+def arm_score(lam, signed):
+    def score(y, u):
+        r = M.residuals(y, u); m = np.zeros_like(r)
+        for t in range(1, len(r)):
+            m[t] = lam * m[t - 1] + (1 - lam) * (r[t] if signed else abs(r[t]))
+        return np.abs(m)
+    return score
+
+def mcnemar_exact(a_only, b_only):
+    n = a_only + b_only
+    if not n: return 1.0
+    k = min(a_only, b_only)
+    return min(1.0, 2 * sum(math.comb(n, j) for j in range(k + 1)) / (2 ** n))
+
+# Checks: patch leaves the original path identical; generic arms equal his two monitor functions.
+checks = {}
+checks['patched_sim_default_path_identical'] = all(
+    SV.simulate(s, null_degradation=n) == S.simulate(s, null_degradation=n) for s in list(CAL) + list(DEG) for n in (True, False))
+checks['patched_sim_null_identical_under_variance_flag'] = all(
+    SV.simulate(s, null_degradation=True, variance_fault=True) == S.simulate(s, null_degradation=True) for s in CAL)
+ident = []
+for s in list(CAL)[:10] + list(NUL)[:10]:
+    y, u, _, _ = series(S.simulate(s, null_degradation=True))
+    ident.append(float(np.max(np.abs(arm_score(0.90, False)(y, u) - M.baseline_score(y, u)))))
+    ident.append(float(np.max(np.abs(arm_score(0.97, True)(y, u) - M.efmw_score(y, u)))))
+checks['max_abs_diff_vs_his_monitor_functions'] = max(ident)
+
+cal = {s: series(S.simulate(s, null_degradation=True)) for s in CAL}
+nul = {s: series(S.simulate(s, null_degradation=True)) for s in NUL}
+deg = {'mean_drift_his_simulator': {s: series(S.simulate(s)) for s in DEG},
+       'variance_fault_auditor_patch': {s: series(SV.simulate(s, variance_fault=True)) for s in DEG}}
+
+calib_rows, maxima_rows, per_seed, summary = [], [], [], {'checks': checks, 'arms': {}, 'faults': {}}
+thr = {}
+for name, lam, sg in ARMS:
+    f = arm_score(lam, sg)
+    mx = {s: M.max_sustained_score(f(y, u)) for s, (y, u, _, _) in cal.items()}
+    for s, v in mx.items(): maxima_rows.append([s, name, f'{v:.16g}'])
+    thr[name] = float(np.sort(list(mx.values()))[75])
+    cal_far = float(np.mean(np.array(list(mx.values())) > thr[name]))
+    nfa = 0
+    for s, (y, u, on, fail) in nul.items():
+        a = M.first_sustained_after(f(y, u), thr[name]); nfa += a is not None
+        per_seed.append(['heldout_null', s, name, on, fail, '' if a is None else a,
+                         'false_alarm' if a is not None else 'no_alert', ''])
+    calib_rows.append([name, lam, 'signed' if sg else 'abs', f'{thr[name]:.16g}', f'{cal_far:.4f}', f'{nfa}/80', f'{nfa/80:.4f}'])
+    summary['arms'][name] = {'decay': lam, 'averaging': 'signed then abs' if sg else 'abs then average',
+                             'threshold': thr[name], 'calibration_FAR': cal_far, 'heldout_null_false_alarms': nfa}
+
+for fname, traces in deg.items():
+    leads, act, res = {}, {}, {}
+    for name, lam, sg in ARMS:
+        f = arm_score(lam, sg); L, A = [], []
+        cats = {'actionable': 0, 'pre_onset_alert': 0, 'alert_at_or_after_failure': 0, 'no_alert': 0}
+        for s, (y, u, on, fail) in traces.items():
+            a = M.first_sustained_after(f(y, u), thr[name])
+            if a is None: cat = 'no_alert'
+            elif a < on: cat = 'pre_onset_alert'
+            elif a < fail: cat = 'actionable'
+            else: cat = 'alert_at_or_after_failure'
+            cats[cat] += 1
+            lead = fail - a if cat == 'actionable' else -999
+            L.append(lead); A.append(int(cat == 'actionable'))
+            per_seed.append([fname, s, name, on, fail, '' if a is None else a, cat, lead])
+        leads[name], act[name] = np.array(L), np.array(A)
+        det = leads[name][leads[name] != -999]
+        res[name] = {**cats, 'median_lead_all_runs_missed_as_-999': float(np.median(L)),
+                     'median_lead_detected_only': float(np.median(det)) if len(det) else None}
+    for name, _, _ in ARMS:
+        g = leads[name] - leads[BASE]
+        rng = np.random.default_rng(230048)
+        boot = np.array([np.median(rng.choice(g, size=80, replace=True)) for _ in range(10000)])
+        e_only = int(np.sum((act[name] == 1) & (act[BASE] == 0))); b_only = int(np.sum((act[name] == 0) & (act[BASE] == 1)))
+        both = (act[name] == 1) & (act[BASE] == 1)
+        res[name].update({'median_paired_gain_vs_baseline': float(np.median(g)),
+                          'gain_bootstrap_95ci': [float(x) for x in np.quantile(boot, [0.025, 0.975])],
+                          'mcnemar_arm_only_baseline_only_p': [e_only, b_only, mcnemar_exact(e_only, b_only)],
+                          'median_gain_both_detected': float(np.median(g[both])) if both.any() else None,
+                          'n_both_detected': int(both.sum())})
+    summary['faults'][fname] = res
+
+def wcsv(path, header, rows):
+    with open(os.path.join(OUT, path), 'w', newline='') as fh:
+        w = csv.writer(fh, lineterminator='\n'); w.writerow(header); w.writerows(rows)
+wcsv('calibration_4arms.csv', ['arm', 'decay', 'averaging', 'threshold', 'calibration_FAR', 'heldout_null_false_alarms', 'heldout_null_FAR'], calib_rows)
+wcsv('calibration_maxima.csv', ['seed', 'arm', 'max_sliding_min_score_steps20_499'], maxima_rows)
+wcsv('per_seed.csv', ['condition', 'seed', 'arm', 'onset', 'failure', 'first_sustained_alert', 'outcome', 'lead'], per_seed)
+json.dump(summary, open(os.path.join(OUT, 'results.json'), 'w'), indent=1)
+print(json.dumps(summary['checks']))
+for name in summary['arms']: print(name, summary['arms'][name])
+for fname, res in summary['faults'].items():
+    print('==', fname)
+    for name, r in res.items(): print(name, r)

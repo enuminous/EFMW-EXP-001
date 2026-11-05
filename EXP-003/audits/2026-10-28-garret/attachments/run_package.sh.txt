@@ -1,0 +1,33 @@
+#!/bin/sh
+# Auditor's run script for the EXP-003 package. Run from the EFMW-EXP-001 repo root at
+# 8f11bc5320cffb10932d5d31da7072d6ad4f65c2, with audit/ holding exp003_2x2_package.py and variance_fault.patch.
+set -u
+mkdir -p repro_out
+R=repro_out
+{
+echo "== commit"; git rev-parse HEAD
+echo "== EXP-003 diff vs 65134993 (commit Matthew linked) and vs aa7cc91 (commit that added EXP-003); empty = identical"
+git diff --stat 65134993069c2dc0c46a60fccd8bcdb2d951cdd3 HEAD -- EXP-003; git diff --stat aa7cc9183220df1eb39537107f38cbce8f51e515 HEAD -- EXP-003; echo "(end)"
+echo "== environment"; python3 --version; python3 -c "import numpy; print('numpy', numpy.__version__)"; uname -m
+echo "== committed CSVs (as checked out): sha256, bytes, lines, CR count"
+for f in EXP-003/calibration.csv EXP-003/results.csv; do echo "$(sha256sum $f | cut -d' ' -f1) $(wc -c < $f) $(wc -l < $f) $(tr -cd '\r' < $f | wc -c) $f"; done
+echo "== git blob hashes of committed CSVs"; git ls-files -s EXP-003/calibration.csv EXP-003/results.csv
+echo "== SHA256SUMS.txt entries"; grep csv EXP-003/SHA256SUMS.txt
+mkdir -p $R/committed; cp EXP-003/calibration.csv EXP-003/results.csv $R/committed/
+} > $R/provenance.txt 2>&1
+(cd EXP-003 && python3 run.py && python3 analyze.py) > $R/his_run_and_analyze.txt 2>&1; echo "exit $?" >> $R/his_run_and_analyze.txt
+{
+echo "== regenerated CSVs: sha256, bytes, lines, CR count"
+for f in EXP-003/calibration.csv EXP-003/results.csv; do echo "$(sha256sum $f | cut -d' ' -f1) $(wc -c < $f) $(wc -l < $f) $(tr -cd '\r' < $f | wc -c) $f"; done
+echo "== sha256sum -c SHA256SUMS.txt on regenerated files"; (cd EXP-003 && sha256sum -c SHA256SUMS.txt)
+echo "== regenerated with CRLF->LF: sha256 (compare to committed)"
+for f in calibration.csv results.csv; do echo "$(tr -d '\r' < EXP-003/$f | sha256sum | cut -d' ' -f1) $f"; done
+echo "== committed with LF->CRLF: sha256 (compare to SHA256SUMS)"
+for f in calibration.csv results.csv; do echo "$(sed 's/$/\r/' $R/committed/$f | sha256sum | cut -d' ' -f1) $f"; done
+echo "== byte comparison after stripping CR (cmp; no output = identical)"
+for f in calibration.csv results.csv; do tr -d '\r' < EXP-003/$f > /tmp/$f.lf; cmp /tmp/$f.lf $R/committed/$f && echo "$f identical"; done
+echo "== git diff --ignore-cr-at-eol --stat (empty = same content)"; git diff --ignore-cr-at-eol --stat -- EXP-003; echo "(end)"
+} > $R/csv_equivalence.txt 2>&1
+python3 audit/exp003_2x2_package.py > $R/package_stdout.txt 2>&1; echo "exit $?" >> $R/package_stdout.txt
+rm -rf $R/committed
+cat $R/provenance.txt $R/his_run_and_analyze.txt $R/csv_equivalence.txt $R/package_stdout.txt
