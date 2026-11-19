@@ -72,4 +72,4 @@ This is a proof-of-method experiment for recursive coherence monitoring on a syn
 
 [EFMW-EXP-002](EXP-002/README.md) reuses the frozen monitors and thresholds to measure sustained false alarms on synthetic no-degradation traces, including a brief benign sensor-offset pulse. Its preregistered absolute false-alarm criterion failed; it is not field validation.
 
-[EFMW-EXP-003](EXP-003/README.md) follows with separate no-degradation threshold calibration to a shared whole-run false-alarm budget, then a held-out synthetic comparison. It passes its stated screen but remains simulator-only evidence.
+[EFMW-EXP-003](EXP-003/README.md) follows with separate no-degradation threshold calibration to a shared whole-run false-alarm budget, then a held-out synthetic comparison. It passes its stated screen but remains simulator-only evidence. The [EXP-001–003 evidence index](EVIDENCE_INDEX.md) links the frozen mean-drift result, the EXP-002 benign-pulse failure, and the exploratory variance-fault ranking reversal.
